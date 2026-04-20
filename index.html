@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrated Skills ESL Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- ANIMATABLE CSS PROPERTIES --- */
+        @property --dot-size {
+            syntax: '<length>';
+            inherits: false;
+            initial-value: 2px;
+        }
+
+        :root {
+            --size: 20px;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.85);
+            --transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: hsl(0 0% 6%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        /* --- PRIOR PREMIUM CONIC BACKGROUND WITH PULSING DOTS --- */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: conic-gradient(from 180deg at 50% 70%, hsla(0,0%,98%,1) 0deg, #eec32d 72deg, #ec4b4b 144deg, #709ab9 216deg, #4dffbf 288deg, hsla(0,0%,98%,1) 1turn);
+            
+            /* The dual-layer mask: Pulsing Dots + Panning Noise */
+            -webkit-mask:
+                radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size),
+                url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+            -webkit-mask-composite: source-in;
+            
+            mask:
+                radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size),
+                url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+            mask-composite: intersect;
+            
+            /* Animations: flicker pans the noise, pulseDots shrinks/grows the dots subtly */
+            animation: flicker 20s infinite linear, pulseDots 4s infinite alternate ease-in-out;
+        }
+
+        /* Dark overlay to ensure text readability and protect vision */
+        .background-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 15, 0.65);
+            z-index: -1;
+        }
+
+        @keyframes flicker {
+            to {
+                -webkit-mask-position: 50% 50%, 0 50%;
+                mask-position: 50% 50%, 0 50%;
+            }
+        }
+
+        @keyframes pulseDots {
+            0% { 
+                --dot-size: 2.5px; 
+                filter: brightness(1.1); 
+            }
+            100% { 
+                --dot-size: 1.2px; 
+                filter: brightness(0.6); 
+            }
+        }
+
+        /* --- LIQUID GLASS UI (Inspired by WebGL Shader) --- */
+        .glass-panel {
+            position: relative;
+            border-radius: 32px;
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        /* 1. The Refraction Layer (Mimics shader displacement) */
+        .glass-bend {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            backdrop-filter: blur(18px) saturate(120%);
+            -webkit-backdrop-filter: blur(18px) saturate(120%);
+            filter: url(#glass-refraction);
+            z-index: 0;
+        }
+
+        /* 2. The Base Color / Tint Layer */
+        .glass-face {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: rgba(20, 20, 30, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        /* 3. The Specular Edge Highlight (Mimics shader boxLight) */
+        .glass-edge {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 1.5px 1.5px 3px 0 rgba(255, 255, 255, 0.5),
+                        inset -1.5px -1.5px 3px 0 rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+
+        .glass-content {
+            position: relative;
+            z-index: 3;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-radius: inherit;
+        }
+
+        /* --- BUTTONS --- */
+        .glass-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(26, 118, 173, 0.4);
+            border-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .glass-btn:hover::after {
+            left: 150%;
+        }
+
+        /* --- SIDE NAVIGATION --- */
+        .side-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            bottom: 20px;
+            width: 260px;
+            z-index: 100;
+        }
+
+        .side-nav .glass-content {
+            padding: 40px 20px;
+            align-items: flex-start;
+        }
+
+        .nav-brand {
+            font-family: "Outfit", sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #ffffff, #a8c0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            padding-left: 10px;
+            line-height: 1.2;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+        }
+
+        .nav-links {
+            list-style: none;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.05rem;
+            padding: 14px 16px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.15);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-links a:hover, .nav-links a.active-link {
+            color: #fff;
+            transform: translateX(8px);
+        }
+
+        .nav-links a:hover::before, .nav-links a.active-link::before {
+            opacity: 1;
+        }
+
+        /* --- SPA VIEW LOGIC --- */
+        main {
+            width: 100%;
+            margin-left: 300px;
+            max-width: calc(100% - 300px);
+            padding: 20px;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .view {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .view.active {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translateY(0);
+            animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- TYPOGRAPHY & SPACING --- */
+        h1 {
+            font-family: "Outfit", sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+        }
+
+        h2 {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-family: "Outfit", sans-serif;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* --- LANDING PAGE SPECIFIC --- */
+        #home {
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-panel {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        /* --- PORTFOLIO MAIN PAGE SPECIFIC --- */
+        #portfolio {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+
+        .portfolio-header {
+            margin-bottom: 60px;
+        }
+
+        .portfolio-header .glass-content {
+            text-align: center;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .card .glass-content {
+            padding: 30px;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-iframe-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .card iframe, .lesson-iframe iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        .card .glass-btn {
+            margin-top: auto;
+            width: 100%;
+        }
+
+        /* --- INDIVIDUAL LESSON PAGE SPECIFIC --- */
+        .lesson-page {
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+
+        .lesson-header {
+            margin-bottom: 40px;
+        }
+
+        .lesson-header .glass-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 40px;
+            flex-direction: row;
+        }
+
+        .btn-back {
+            padding: 10px 24px;
+            font-size: 1rem;
+        }
+
+        .lesson-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+        }
+
+        .lesson-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .lesson-section .glass-content {
+            padding: 25px;
+        }
+
+        .lesson-section ul {
+            list-style-position: inside;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .lesson-section li {
+            margin-bottom: 10px;
+        }
+
+        .lesson-iframe {
+            height: 600px;
+            border-radius: 24px;
+        }
+
+        .lesson-iframe .glass-content {
+            padding: 20px;
+        }
+
+        .lesson-iframe iframe {
+            pointer-events: auto;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+
+            .side-nav {
+                position: relative;
+                top: 0; left: 0; bottom: 0;
+                width: 100%;
+                margin-bottom: 20px;
+                padding: 10px;
+                height: auto;
+            }
+            
+            .side-nav .glass-content {
+                padding: 20px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-brand { margin-bottom: 0; }
+
+            .nav-links {
+                width: auto;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            main {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            .lesson-grid { grid-template-columns: 1fr; }
+            
+            .lesson-header .glass-content {
+                flex-direction: column-reverse;
+                gap: 20px;
+                text-align: center;
+                padding: 30px 20px;
+            }
+
+            .glass-content { padding: 25px; }
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG Filter for Liquid Glass Refraction (Smoothed for WebGL aesthetic) -->
+    <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
+        <filter id="glass-refraction" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox">
+            <!-- Lower frequency makes broader, smoother liquid waves -->
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" result="noise" />
+            <!-- Scale defines how intensely the background is distorted -->
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+    <!-- Pulsing / Conic Background -->
+    <div class="background"></div>
+    <div class="background-overlay"></div>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav glass-panel">
+        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+        <div class="glass-content">
+            <h2 class="nav-brand">ESL<br>Portfolio</h2>
+            <ul class="nav-links">
+                <li><a href="#" onclick="navigateTo('home'); return false;" class="active-link" id="link-home">Home</a></li>
+                <li><a href="#" onclick="navigateTo('portfolio'); return false;" id="link-portfolio">Overview</a></li>
+                <li><a href="#" onclick="navigateTo('lesson1'); return false;" id="link-lesson1">Lesson 1</a></li>
+                <li><a href="#" onclick="navigateTo('lesson2'); return false;" id="link-lesson2">Lesson 2</a></li>
+                <li><a href="#" onclick="navigateTo('lesson3'); return false;" id="link-lesson3">Lesson 3</a></li>
+                <li><a href="#" onclick="navigateTo('lesson4'); return false;" id="link-lesson4">Lesson 4</a></li>
+                <li><a href="#" onclick="navigateTo('lesson5'); return false;" id="link-lesson5">Lesson 5</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="app">
+        
+        <!-- ==========================================
+             1. LANDING PAGE (HOME)
+        =========================================== -->
+        <section id="home" class="view active">
+            <div class="glass-panel hero-panel">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <h1 style="text-align: center;">Integrated Skills ESL Portfolio</h1>
+                    <h2 style="text-align: center; margin-bottom: 40px;">Listening, Speaking, Reading, Writing & Language Arts Integration</h2>
+                    
+                    <p>
+                        In real-life context, English language is important. The need to use integrated-skills instruction relates to the fact that in real-life communication, language is used in an interrelated manner. Learners never use listening, speaking, reading, or writing in isolation, but rather combine the skills to comprehend and convey meaning. Thus, skills inclusion in the lesson will assist pupils to learn English in a more meaningful and effective way. It also enables students to consolidate on what they have studied because one competence facilitates another. To illustrate, listening tasks can be input that pupils will utilize in speaking or writing. This renders the process of learning more interesting, practical and easier to remember by the pupils.
+                    </p>
+                    <p>
+                        It is a balance between listening, speaking, reading, writing and language arts that is incorporated in this set of lesson plans. The lesson of listening is based on the comprehension of everyday life based on audio and is combined with speaking and vocabulary, during which the pupils answer questions and create simple sentences. The speech lesson combines listening and language arts by using songs and interactive lessons, where the pupils are able to rehearse prepositions in an effective and entertaining setting. The reading lesson combines writing and vocabulary, in which the pupils read simple texts and combine the vocabulary to form sentences. The writing lesson is a combination of reading and grammar whereby emphasis is laid on sentence construction through proper structures. Moreover, the lesson in the field of language arts combines all four skills with the help of the creative activities (songs, role-play, and games).
+                    </p>
+                    <p>
+                        The learners targeted are primary school students whose level of proficiency varies. The lessons will be easy, interactive, and facilitating, and they will involve visuals, digital tools, and guided activities to make the pupils learn and engage. Pupils know the context of the lessons, e.g. their daily routines and classroom scenarios, so they can make the learning relevant to their own experiences and this will promote active learning.
+                    </p>
+                    
+                    <button class="glass-btn" onclick="navigateTo('portfolio')" style="align-self: center; margin-top: 20px;">
+                        Enter Portfolio
+                        <svg style="margin-left: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             2. MAIN PORTFOLIO PAGE
+        =========================================== -->
+        <section id="portfolio" class="view">
+            <div class="glass-panel portfolio-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <h1>Curriculum Overview</h1>
+                    <h2>Select a lesson plan to view the integrated approach</h2>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Card 1 -->
+                <div class="glass-panel card">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <div class="card-iframe-container">
+                            <iframe src="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/preview" title="Lesson 1"></iframe>
+                        </div>
+                        <h3>Lesson 1</h3>
+                        <p style="font-size: 0.95rem;">Focus: Listening + Speaking + Vocabulary. Students practice conversational turn-taking while identifying key concepts in audio tracks.</p>
+                        <button class="glass-btn" onclick="navigateTo('lesson1')">View Full Lesson</button>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel card">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <div class="card-iframe-container">
+                            <iframe src="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/preview" title="Lesson 2"></iframe>
+                        </div>
+                        <h3>Lesson 2</h3>
+                        <p style="font-size: 0.95rem;">Focus: Speaking + Listening + Language Arts. Analyzing figurative language through poetry and participating in peer review sessions.</p>
+                        <button class="glass-btn" onclick="navigateTo('lesson2')">View Full Lesson</button>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel card">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <div class="card-iframe-container">
+                            <iframe src="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/preview" title="Lesson 3"></iframe>
+                        </div>
+                        <h3>Lesson 3</h3>
+                        <p style="font-size: 0.95rem;">Focus: Reading + Writing + Vocabulary. Comprehending articles using context clues and drafting analytical summary paragraphs.</p>
+                        <button class="glass-btn" onclick="navigateTo('lesson3')">View Full Lesson</button>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="glass-panel card">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <div class="card-iframe-container">
+                            <iframe src="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/preview" title="Lesson 4"></iframe>
+                        </div>
+                        <h3>Lesson 4</h3>
+                        <p style="font-size: 0.95rem;">Focus: Reading + Grammar + Writing. Emphasis is laid on sentence construction through proper structures and reading comprehension.</p>
+                        <button class="glass-btn" onclick="navigateTo('lesson4')">View Full Lesson</button>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="glass-panel card">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <div class="card-iframe-container">
+                            <iframe src="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/preview" title="Lesson 5"></iframe>
+                        </div>
+                        <h3>Lesson 5</h3>
+                        <p style="font-size: 0.95rem;">Focus: Language Arts Integration. Combines all four skills with the help of creative activities like songs, role-play, and games.</p>
+                        <button class="glass-btn" onclick="navigateTo('lesson5')">View Full Lesson</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             3. INDIVIDUAL LESSON PAGES
+        =========================================== -->
+
+        <!-- LESSON 1 -->
+        <section id="lesson1" class="view lesson-page">
+            <div class="glass-panel lesson-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <div>
+                        <h1>Lesson Plan 1</h1>
+                        <h2>Listening + Speaking + Vocabulary</h2>
+                    </div>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
+                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Portfolio
+                    </button>
+                </div>
+            </div>
+
+            <div class="lesson-grid">
+                <div class="lesson-sidebar">
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>🎯 Objectives</h3>
+                            <ul>
+                                <li>Identify main ideas and specific details in an audio recording.</li>
+                                <li>Practice conversational turn-taking and natural pacing.</li>
+                                <li>Learn and apply 10 target vocabulary words in context.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>⚙️ Activities</h3>
+                            <ul>
+                                <li><strong>Pre:</strong> Brainstorming and visual vocabulary introduction.</li>
+                                <li><strong>While:</strong> Listening for gist, followed by listening for specific details.</li>
+                                <li><strong>Post:</strong> Group roleplay utilizing the target vocabulary.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>📎 Materials</h3>
+                            <ul>
+                                <li>Audio Track (MP3)</li>
+                                <li>Vocabulary Flashcards</li>
+                                <li>Roleplay Scenario Cards</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel lesson-iframe">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+                        <!-- Replace src with your actual Google Docs embed link -->
+                        <iframe src="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/preview" title="Lesson 1 Doc"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LESSON 2 -->
+        <section id="lesson2" class="view lesson-page">
+            <div class="glass-panel lesson-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <div>
+                        <h1>Lesson Plan 2</h1>
+                        <h2>Speaking + Listening + Language Arts</h2>
+                    </div>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
+                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Portfolio
+                    </button>
+                </div>
+            </div>
+
+            <div class="lesson-grid">
+                <div class="lesson-sidebar">
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>🎯 Objectives</h3>
+                            <ul>
+                                <li>Present a short poem or narrative with expressive intonation.</li>
+                                <li>Actively listen to peers and provide constructive feedback.</li>
+                                <li>Understand and identify metaphors and similes.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>⚙️ Activities</h3>
+                            <ul>
+                                <li><strong>Pre:</strong> Analyze a sample poem for figurative language.</li>
+                                <li><strong>While:</strong> Students prepare and present their pieces.</li>
+                                <li><strong>Post:</strong> Structured peer review and reflection.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>📎 Materials</h3>
+                            <ul>
+                                <li>Poetry Anthology Handouts</li>
+                                <li>Presentation Rubric</li>
+                                <li>Peer Feedback Forms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel lesson-iframe">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+                        <iframe src="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/preview" title="Lesson 2 Doc"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LESSON 3 -->
+        <section id="lesson3" class="view lesson-page">
+            <div class="glass-panel lesson-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <div>
+                        <h1>Lesson Plan 3</h1>
+                        <h2>Reading + Writing + Vocabulary</h2>
+                    </div>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
+                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Portfolio
+                    </button>
+                </div>
+            </div>
+
+            <div class="lesson-grid">
+                <div class="lesson-sidebar">
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>🎯 Objectives</h3>
+                            <ul>
+                                <li>Comprehend and extract key arguments from a short article.</li>
+                                <li>Write a cohesive summary paragraph using transition words.</li>
+                                <li>Utilize context clues to define unfamiliar terms.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>⚙️ Activities</h3>
+                            <ul>
+                                <li><strong>Pre:</strong> Skimming and scanning exercises.</li>
+                                <li><strong>While:</strong> Detailed reading, highlighting, and annotating text.</li>
+                                <li><strong>Post:</strong> Drafting, editing, and finalizing a summary paragraph.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>📎 Materials</h3>
+                            <ul>
+                                <li>Article Copies (Printed/Digital)</li>
+                                <li>Highlighters</li>
+                                <li>Summary Graphic Organizer</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel lesson-iframe">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+                        <iframe src="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/preview" title="Lesson 3 Doc"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LESSON 4 -->
+        <section id="lesson4" class="view lesson-page">
+            <div class="glass-panel lesson-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <div>
+                        <h1>Lesson Plan 4</h1>
+                        <h2>Reading + Grammar + Writing</h2>
+                    </div>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
+                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Portfolio
+                    </button>
+                </div>
+            </div>
+
+            <div class="lesson-grid">
+                <div class="lesson-sidebar">
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>🎯 Objectives</h3>
+                            <ul>
+                                <li>Comprehend reading structures and extract contextual meaning.</li>
+                                <li>Construct proper sentences using target grammar rules.</li>
+                                <li>Apply new vocabulary in original writing tasks.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>⚙️ Activities</h3>
+                            <ul>
+                                <li><strong>Pre:</strong> Introduction to the text and grammatical focus.</li>
+                                <li><strong>While:</strong> Guided reading and identifying grammar in context.</li>
+                                <li><strong>Post:</strong> Drafting original sentences and peer review.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>📎 Materials</h3>
+                            <ul>
+                                <li>Reading Texts</li>
+                                <li>Grammar Worksheets</li>
+                                <li>Digital/Whiteboard</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel lesson-iframe">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+                        <iframe src="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/preview" title="Lesson 4 Doc"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LESSON 5 -->
+        <section id="lesson5" class="view lesson-page">
+            <div class="glass-panel lesson-header">
+                <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                <div class="glass-content">
+                    <div>
+                        <h1>Lesson Plan 5</h1>
+                        <h2>Language Arts Integration (All Skills)</h2>
+                    </div>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
+                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Portfolio
+                    </button>
+                </div>
+            </div>
+
+            <div class="lesson-grid">
+                <div class="lesson-sidebar">
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>🎯 Objectives</h3>
+                            <ul>
+                                <li>Engage in creative expression using the English language.</li>
+                                <li>Combine listening, speaking, reading, and writing in one holistic activity.</li>
+                                <li>Collaborate effectively in group role-plays or games.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>⚙️ Activities</h3>
+                            <ul>
+                                <li><strong>Pre:</strong> Song or story introduction to set the scene.</li>
+                                <li><strong>While:</strong> Interactive group role-play or language game.</li>
+                                <li><strong>Post:</strong> Group reflection and creative writing journal entry.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="glass-panel lesson-section">
+                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                        <div class="glass-content">
+                            <h3>📎 Materials</h3>
+                            <ul>
+                                <li>Audio/Video Clips</li>
+                                <li>Role-play Props</li>
+                                <li>Creative Writing Journals</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-panel lesson-iframe">
+                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
+                    <div class="glass-content">
+                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+                        <iframe src="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/preview" title="Lesson 5 Doc"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Navigation Script -->
+    <script>
+        function navigateTo(targetViewId) {
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active-link');
+            });
+            const activeLink = document.getElementById('link-' + targetViewId);
+            if(activeLink) {
+                activeLink.classList.add('active-link');
+            }
+
+            const views = document.querySelectorAll('.view');
+            
+            views.forEach(view => {
+                view.classList.remove('active');
+                setTimeout(() => {
+                    if(!view.classList.contains('active')) {
+                        view.style.display = 'none';
+                    }
+                }, 500); 
+            });
+
+            const targetView = document.getElementById(targetViewId);
+            if(targetView) {
+                targetView.style.display = 'flex'; 
+                setTimeout(() => {
+                    targetView.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 50);
+            }
+        }
+    </script>
+</body>
+</html>
