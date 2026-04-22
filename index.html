@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integrated Skills ESL Portfolio</title>
+    <title>Naufal's Integrated Skills ESL Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Outfit:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         /* --- ANIMATABLE CSS PROPERTIES --- */
@@ -17,14 +17,17 @@
             --size: 20px;
             --text-main: #ffffff;
             --text-muted: rgba(255, 255, 255, 0.85);
-            --transition: 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            --transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            --glass-bg: rgba(20, 20, 30, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --accent: #4da8da;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: "Segoe UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
@@ -35,244 +38,130 @@
             display: flex;
         }
 
-        /* --- PRIOR PREMIUM CONIC BACKGROUND WITH PULSING DOTS --- */
+        /* --- PREMIUM CONIC BACKGROUND WITH PULSING DOTS --- */
         .background {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
+            top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
             background: conic-gradient(from 180deg at 50% 70%, hsla(0,0%,98%,1) 0deg, #eec32d 72deg, #ec4b4b 144deg, #709ab9 216deg, #4dffbf 288deg, hsla(0,0%,98%,1) 1turn);
-            
-            /* The dual-layer mask: Pulsing Dots + Panning Noise */
-            -webkit-mask:
-                radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size),
-                url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+            -webkit-mask: radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size), url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
             -webkit-mask-composite: source-in;
-            
-            mask:
-                radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size),
-                url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+            mask: radial-gradient(circle at 50% 50%, white var(--dot-size), transparent calc(var(--dot-size) + 0.5px)) 50% 50% / var(--size) var(--size), url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
             mask-composite: intersect;
-            
-            /* Animations: flicker pans the noise, pulseDots shrinks/grows the dots subtly */
             animation: flicker 20s infinite linear, pulseDots 4s infinite alternate ease-in-out;
         }
 
-        /* Dark overlay to ensure text readability and protect vision */
         .background-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(10, 10, 15, 0.65);
-            z-index: -1;
+            position: fixed; inset: 0; background: rgba(10, 10, 15, 0.65); z-index: -1;
         }
 
         @keyframes flicker {
-            to {
-                -webkit-mask-position: 50% 50%, 0 50%;
-                mask-position: 50% 50%, 0 50%;
-            }
+            to { -webkit-mask-position: 50% 50%, 0 50%; mask-position: 50% 50%, 0 50%; }
         }
 
         @keyframes pulseDots {
-            0% { 
-                --dot-size: 2.5px; 
-                filter: brightness(1.1); 
-            }
-            100% { 
-                --dot-size: 1.2px; 
-                filter: brightness(0.6); 
-            }
+            0% { --dot-size: 2.5px; filter: brightness(1.1); }
+            100% { --dot-size: 1.2px; filter: brightness(0.6); }
         }
 
-        /* --- LIQUID GLASS UI (Inspired by WebGL Shader) --- */
+        /* --- STANDARD LIQUID GLASS UI (For Navigation & Cards) --- */
         .glass-panel {
-            position: relative;
-            border-radius: 32px;
+            position: relative; border-radius: 32px;
             transition: transform var(--transition), box-shadow var(--transition);
         }
-
-        /* 1. The Refraction Layer (Mimics shader displacement) */
         .glass-bend {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            backdrop-filter: blur(18px) saturate(120%);
-            -webkit-backdrop-filter: blur(18px) saturate(120%);
-            filter: url(#glass-refraction);
-            z-index: 0;
+            position: absolute; inset: 0; border-radius: inherit;
+            backdrop-filter: blur(18px) saturate(120%); -webkit-backdrop-filter: blur(18px) saturate(120%);
+            filter: url(#glass-refraction); z-index: 0;
         }
-
-        /* 2. The Base Color / Tint Layer */
         .glass-face {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            background: rgba(20, 20, 30, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            z-index: 1;
+            position: absolute; inset: 0; border-radius: inherit;
+            background: var(--glass-bg); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); z-index: 1;
         }
-
-        /* 3. The Specular Edge Highlight (Mimics shader boxLight) */
         .glass-edge {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-            box-shadow: inset 1.5px 1.5px 3px 0 rgba(255, 255, 255, 0.5),
-                        inset -1.5px -1.5px 3px 0 rgba(255, 255, 255, 0.1);
+            position: absolute; inset: 0; border-radius: inherit;
+            box-shadow: inset 1.5px 1.5px 3px 0 rgba(255, 255, 255, 0.5), inset -1.5px -1.5px 3px 0 rgba(255, 255, 255, 0.1);
             z-index: 2;
         }
-
         .glass-content {
-            position: relative;
-            z-index: 3;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            border-radius: inherit;
+            position: relative; z-index: 3; padding: 40px; display: flex; flex-direction: column; height: 100%; border-radius: inherit;
         }
 
         /* --- BUTTONS --- */
+        .btn-row { display: flex; gap: 12px; margin-top: auto; width: 100%; }
+
         .glass-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 100px;
-            cursor: pointer;
-            transition: all var(--transition);
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: relative;
-            overflow: hidden;
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 14px 24px; font-size: 1rem; font-weight: 600; color: #fff;
+            background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 100px;
+            cursor: pointer; transition: all var(--transition); text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); position: relative; overflow: hidden;
+            flex: 1; white-space: nowrap;
         }
-
         .glass-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: skewX(-20deg);
-            transition: 0.5s;
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-20deg); transition: 0.5s;
         }
-
         .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(26, 118, 173, 0.4);
-            border-color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.15); transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.8);
+        }
+        .glass-btn:hover::after { left: 150%; }
+
+        /* Dynamic View Lesson Button & Arrow */
+        .view-lesson-btn .arrow-icon {
+            width: 0; opacity: 0; margin-left: 0; transform: translateX(-15px);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .view-lesson-btn:hover .arrow-icon {
+            width: 18px; opacity: 1; margin-left: 8px; transform: translateX(0);
         }
 
-        .glass-btn:hover::after {
-            left: 150%;
+        /* Proportioned Back Button */
+        .btn-back {
+            flex: none; width: auto; padding: 8px 24px; border-radius: 30px; font-size: 0.95rem;
         }
 
         /* --- SIDE NAVIGATION --- */
         .side-nav {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            bottom: 20px;
-            width: 260px;
-            z-index: 100;
+            position: fixed; top: 20px; left: 20px; bottom: 20px; width: 260px; z-index: 100;
         }
-
-        .side-nav .glass-content {
-            padding: 40px 20px;
-            align-items: flex-start;
-        }
-
+        .side-nav .glass-content { padding: 40px 20px; align-items: flex-start; }
         .nav-brand {
-            font-family: "Outfit", sans-serif;
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 40px;
+            font-size: 1.8rem; font-weight: 800; margin-bottom: 40px;
             background: linear-gradient(135deg, #ffffff, #a8c0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-            padding-left: 10px;
-            line-height: 1.2;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px; padding-left: 10px; line-height: 1.2;
             filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
+            font-family: "Outfit", sans-serif;
         }
-
-        .nav-links {
-            list-style: none;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        .nav-links { list-style: none; width: 100%; display: flex; flex-direction: column; gap: 10px; }
         .nav-links a {
-            display: flex;
-            align-items: center;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 1.05rem;
-            padding: 14px 16px;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            font-weight: 500;
+            display: flex; align-items: center; color: var(--text-muted);
+            text-decoration: none; font-size: 1.05rem; padding: 12px 16px;
+            border-radius: 12px; transition: all 0.3s ease; position: relative; overflow: hidden; font-weight: 500;
         }
-
         .nav-links a::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.15);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.1); opacity: 0; transition: opacity 0.3s ease; z-index: -1;
         }
-
-        .nav-links a:hover, .nav-links a.active-link {
-            color: #fff;
-            transform: translateX(8px);
-        }
-
-        .nav-links a:hover::before, .nav-links a.active-link::before {
-            opacity: 1;
-        }
+        .nav-links a:hover, .nav-links a.active-link { color: #fff; transform: translateX(6px); }
+        .nav-links a:hover::before, .nav-links a.active-link::before { opacity: 1; }
 
         /* --- SPA VIEW LOGIC --- */
         main {
-            width: 100%;
-            margin-left: 300px;
-            max-width: calc(100% - 300px);
-            padding: 20px;
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            width: 100%; margin-left: 300px; max-width: calc(100% - 300px);
+            padding: 20px; position: relative; min-height: 100vh; display: flex; flex-direction: column;
         }
-
         .view {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
+            display: none; opacity: 0; transform: translateY(20px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-
         .view.active {
-            display: flex;
-            flex-direction: column;
-            opacity: 1;
-            transform: translateY(0);
+            display: flex; flex-direction: column; opacity: 1; transform: translateY(0);
             animation: floatUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
-
         @keyframes floatUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
@@ -280,244 +169,237 @@
 
         /* --- TYPOGRAPHY & SPACING --- */
         h1 {
-            font-family: "Outfit", sans-serif;
-            font-size: clamp(2.5rem, 5vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1rem;
+            font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 800; line-height: 1.15; margin-bottom: 1rem;
             background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.2));
-        }
-
-        h2 {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px;
             font-family: "Outfit", sans-serif;
         }
-
-        p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            text-align: justify;
-        }
-
-        /* --- LANDING PAGE SPECIFIC --- */
-        #home {
-            flex-grow: 1;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hero-panel {
-            max-width: 900px;
-            margin: auto;
-        }
+        h2 { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 500; margin-bottom: 1.5rem; color: var(--text-muted); line-height: 1.4; }
+        h3 { font-size: 1.3rem; margin-bottom: 1rem; font-weight: 700; color: #fff; font-family: "Outfit", sans-serif;}
+        p { font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 1.5rem; text-align: justify; }
 
         /* --- PORTFOLIO MAIN PAGE SPECIFIC --- */
-        #portfolio {
-            padding-top: 60px;
-            padding-bottom: 60px;
-        }
-
-        .portfolio-header {
-            margin-bottom: 60px;
-        }
-
-        .portfolio-header .glass-content {
-            text-align: center;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 40px;
-        }
-
-        .card {
-            transition: transform var(--transition), box-shadow var(--transition);
-        }
-
-        .card .glass-content {
-            padding: 30px;
-        }
-
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-        }
-
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .card .glass-content { padding: 30px; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5); }
+        
+        /* Perfectly Centered Document Preview Thumbnails */
         .card-iframe-container {
-            width: 100%;
-            height: 200px;
-            border-radius: 16px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            position: relative;
+            width: 100%; height: 220px; border-radius: 16px; overflow: hidden; margin-bottom: 20px;
+            background: #f1f3f4; position: relative; pointer-events: none; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .card iframe { 
+            position: absolute; top: 50%; left: 50%;
+            width: 140%; height: 140%; border: none; opacity: 0.95; 
+            transform: translate(-50%, -50%) scale(0.7); 
+            transform-origin: center center;
         }
 
-        .card iframe, .lesson-iframe iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            pointer-events: none;
-            opacity: 0.85;
+        /* Overview Cards Options Dropdown */
+        .dropdown-container { position: relative; flex: 0 0 auto; }
+        .dropdown-menu {
+            position: absolute; bottom: 120%; right: 0; background: rgba(30, 30, 45, 0.95);
+            backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 8px; display: flex; flex-direction: column; gap: 6px; opacity: 0; visibility: hidden;
+            transform: translateY(10px); transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            z-index: 50; min-width: 180px;
+        }
+        .dropdown-container:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item {
+            background: transparent; border: none; color: white; padding: 10px 12px; text-align: left;
+            border-radius: 8px; cursor: pointer; transition: background 0.2s; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 500;
+        }
+        .dropdown-item:hover { background: rgba(255,255,255,0.1); }
+        .dropdown-item svg { width: 16px; height: 16px; }
+
+        /* --- CIRCULAR TABS LESSON LAYOUT --- */
+        .lesson-header { margin-bottom: 30px; }
+        .lesson-header .glass-content { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; flex-direction: row; }
+        
+        .lesson-tabs-wrapper { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
+        
+        /* Centered Nav Tabs */
+        .tabs-nav { display: flex; gap: 25px; align-items: center; justify-content: center; }
+        
+        .tab-btn {
+            width: 90px; height: 90px; border-radius: 50%;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #9ca3af; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .tab-btn svg { width: 26px; height: 26px; }
+        .tab-btn.active, .tab-btn:hover {
+            background: linear-gradient(145deg, rgba(77, 168, 218, 0.2), rgba(77, 168, 218, 0.05));
+            color: #fff; border-color: rgba(77, 168, 218, 0.5);
+            transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        .card .glass-btn {
-            margin-top: auto;
-            width: 100%;
+        .tab-content-container {
+            background: rgba(30, 32, 40, 0.6); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 30px; min-height: 250px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; overflow: hidden;
         }
 
-        /* --- INDIVIDUAL LESSON PAGE SPECIFIC --- */
-        .lesson-page {
-            padding-top: 40px;
-            padding-bottom: 60px;
+        .tab-pane { display: none; animation: fadeInTab 0.3s ease-out forwards; }
+        .tab-pane.active { display: block; }
+        
+        @keyframes fadeInTab {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .lesson-header {
-            margin-bottom: 40px;
+        /* Boxed List Items inside Tabs */
+        .boxed-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+        .boxed-list li {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
+            padding: 16px 20px; border-radius: 16px; color: #d1d5db; font-size: 0.95rem; line-height: 1.6;
+            transition: all 0.2s ease; display: flex; align-items: flex-start; gap: 12px;
+        }
+        .boxed-list li::before {
+            content: '✦'; color: var(--accent); font-size: 1.1rem; line-height: 1.4;
+        }
+        .boxed-list li:hover {
+            background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.15); transform: translateX(5px);
+        }
+        .boxed-list strong { color: #fff; font-weight: 600; }
+
+        /* Materials Gallery inside Tab */
+        .materials-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .material-card {
+            display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden;
+            transition: 0.3s;
+        }
+        .material-card:hover {
+            transform: translateY(-4px); border-color: rgba(255, 255, 255, 0.25); box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .material-item {
+            width: 100%; height: 140px; object-fit: cover; cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .material-item:hover { filter: brightness(1.15); }
+        .material-info { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .material-title { font-weight: 700; font-size: 1rem; color: #fff; }
+        .material-desc { font-size: 0.85rem; color: #9ca3af; line-height: 1.4; margin-bottom: 8px; }
+        
+        /* Neater Digital Material Button */
+        .material-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 8px 16px; background: linear-gradient(135deg, rgba(77,168,218,0.2), rgba(77,168,218,0.05));
+            color: #fff; border: 1px solid rgba(77,168,218,0.4); border-radius: 20px; /* Pill shape */
+            font-size: 0.8rem; font-weight: 600; text-decoration: none; transition: 0.3s;
+            margin-top: auto; align-self: flex-start; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .material-btn:hover { 
+            background: linear-gradient(135deg, rgba(77,168,218,0.4), rgba(77,168,218,0.15));
+            border-color: rgba(77,168,218,0.8); transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(77,168,218,0.3);
+        }
+        .material-btn svg { width: 15px; height: 15px; }
+
+        /* Modal Image Viewer */
+        #image-modal {
+            display: none; position: fixed; z-index: 100000; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+        }
+        #image-modal.show { display: flex; opacity: 1; }
+        #modal-img { max-width: 90%; max-height: 90%; border-radius: 12px; box-shadow: 0 0 40px rgba(0,0,0,0.8); transform: scale(0.9); transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1); }
+        #image-modal.show #modal-img { transform: scale(1); }
+        .close-modal { position: absolute; top: 30px; right: 40px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .close-modal:hover { color: #ef4444; transform: scale(1.1); }
+
+        /* --- ERADICATED BUG: TRUE CSS FULLSCREEN VIEWER --- */
+        .doc-viewer-container {
+            width: 100%; height: 65vh; min-height: 450px; 
+            display: flex; flex-direction: column;
+            border-radius: 20px; overflow: hidden; background: #fff; position: relative;
+            transition: border-radius 0.3s ease; box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .lesson-header .glass-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 40px;
-            flex-direction: row;
+        /* Absolutely solid fullscreen override */
+        .doc-viewer-container.is-maximized {
+            position: fixed !important; 
+            inset: 0 !important; /* Locks perfectly to all screen edges safely */
+            width: auto !important; 
+            height: auto !important; 
+            z-index: 99999 !important; 
+            border-radius: 0 !important; 
+            max-height: none !important;
+            margin: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
+        }
+        
+        .doc-viewer-container.is-maximized .btn-fullscreen-enter { display: none !important; }
+        .doc-viewer-container:not(.is-maximized) .btn-fullscreen-exit { display: none !important; }
+
+        .iframe-viewport {
+            order: 1; flex-grow: 1; overflow: auto; position: relative; background: #e5e5e5; display: flex; justify-content: center; min-height: 0;
+        }
+        .doc-toolbar {
+            order: 2; background: rgba(25, 27, 33, 1); padding: 12px 20px;
+            display: flex; gap: 8px; align-items: center; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05);
+            flex-shrink: 0; /* Prevents toolbar from ever being pushed out of view */
+        }
+        .toolbar-btn {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: white;
+            padding: 8px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .toolbar-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); border-color: rgba(255,255,255,0.3); }
+        .toolbar-btn svg { width: 16px; height: 16px; }
+
+        /* Specific Exit Fullscreen Button styling */
+        .btn-fullscreen-exit {
+            background: rgba(239, 68, 68, 0.15) !important; border-color: rgba(239, 68, 68, 0.3) !important; color: #fca5a5 !important; margin-left: 10px;
+        }
+        .btn-fullscreen-exit:hover {
+            background: rgba(239, 68, 68, 0.3) !important; color: #fff !important;
         }
 
-        .btn-back {
-            padding: 10px 24px;
-            font-size: 1rem;
-        }
+        .iframe-scaler { width: 100%; height: 100%; transition: transform 0.2s ease-out; transform-origin: top center; }
+        .iframe-scaler iframe { width: 100%; height: 100%; border: none; box-shadow: 0 0 20px rgba(0,0,0,0.1); background: white; }
 
-        .lesson-grid {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 40px;
-        }
-
-        .lesson-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .lesson-section .glass-content {
-            padding: 25px;
-        }
-
-        .lesson-section ul {
-            list-style-position: inside;
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
-
-        .lesson-section li {
-            margin-bottom: 10px;
-        }
-
-        .lesson-iframe {
-            height: 600px;
-            border-radius: 24px;
-        }
-
-        .lesson-iframe .glass-content {
-            padding: 20px;
-        }
-
-        .lesson-iframe iframe {
-            pointer-events: auto;
-            border-radius: 12px;
-            background: #fff;
-        }
-
-        /* --- RESPONSIVE DESIGN --- */
-        @media (max-width: 900px) {
+        @media (max-width: 1000px) {
             body { flex-direction: column; }
-
-            .side-nav {
-                position: relative;
-                top: 0; left: 0; bottom: 0;
-                width: 100%;
-                margin-bottom: 20px;
-                padding: 10px;
-                height: auto;
-            }
-            
-            .side-nav .glass-content {
-                padding: 20px;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
+            .side-nav { position: relative; top: 0; left: 0; bottom: 0; width: 100%; margin-bottom: 20px; height: auto; }
+            .side-nav .glass-content { padding: 20px; flex-direction: row; justify-content: space-between; align-items: center; flex-wrap: wrap; }
             .nav-brand { margin-bottom: 0; }
-
-            .nav-links {
-                width: auto;
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            main {
-                margin-left: 0;
-                max-width: 100%;
-                padding: 10px;
-            }
-
-            .lesson-grid { grid-template-columns: 1fr; }
-            
-            .lesson-header .glass-content {
-                flex-direction: column-reverse;
-                gap: 20px;
-                text-align: center;
-                padding: 30px 20px;
-            }
-
-            .glass-content { padding: 25px; }
-            h1 { font-size: 2.2rem; }
-            h2 { font-size: 1.2rem; }
+            .nav-links { width: auto; flex-direction: row; flex-wrap: wrap; }
+            main { margin-left: 0; max-width: 100%; padding: 10px; }
+            .lesson-header .glass-content { flex-direction: column-reverse; gap: 20px; text-align: center; }
+            .doc-viewer-container { height: 60vh; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SVG Filter for Liquid Glass Refraction (Smoothed for WebGL aesthetic) -->
+    <!-- SVG Filter for Liquid Glass Refraction -->
     <svg style="display: none" xmlns="http://www.w3.org/2000/svg">
         <filter id="glass-refraction" x="0" y="0" width="100%" height="100%" filterUnits="objectBoundingBox">
-            <!-- Lower frequency makes broader, smoother liquid waves -->
             <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" result="noise" />
-            <!-- Scale defines how intensely the background is distorted -->
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" xChannelSelector="R" yChannelSelector="G" />
         </filter>
     </svg>
 
-    <!-- Pulsing / Conic Background -->
+    <!-- Backgrounds -->
     <div class="background"></div>
     <div class="background-overlay"></div>
+
+    <!-- Image Modal -->
+    <div id="image-modal" onclick="closeImageModal()">
+        <span class="close-modal">&times;</span>
+        <img id="modal-img" src="" alt="Fullscreen Material" onclick="event.stopPropagation()">
+    </div>
 
     <!-- Side Navigation -->
     <nav class="side-nav glass-panel">
         <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
         <div class="glass-content">
-            <h2 class="nav-brand">ESL<br>Portfolio</h2>
+            <h2 class="nav-brand">Naufal's<br>Portfolio</h2>
             <ul class="nav-links">
                 <li><a href="#" onclick="navigateTo('home'); return false;" class="active-link" id="link-home">Home</a></li>
                 <li><a href="#" onclick="navigateTo('portfolio'); return false;" id="link-portfolio">Overview</a></li>
@@ -533,15 +415,14 @@
     <main id="app">
         
         <!-- ==========================================
-             1. LANDING PAGE (HOME)
+             1. LANDING PAGE
         =========================================== -->
         <section id="home" class="view active">
-            <div class="glass-panel hero-panel">
+            <div class="glass-panel hero-panel" style="max-width: 900px; margin: auto;">
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <h1 style="text-align: center;">Integrated Skills ESL Portfolio</h1>
                     <h2 style="text-align: center; margin-bottom: 40px;">Listening, Speaking, Reading, Writing & Language Arts Integration</h2>
-                    
                     <p>
                         In real-life context, English language is important. The need to use integrated-skills instruction relates to the fact that in real-life communication, language is used in an interrelated manner. Learners never use listening, speaking, reading, or writing in isolation, but rather combine the skills to comprehend and convey meaning. Thus, skills inclusion in the lesson will assist pupils to learn English in a more meaningful and effective way. It also enables students to consolidate on what they have studied because one competence facilitates another. To illustrate, listening tasks can be input that pupils will utilize in speaking or writing. This renders the process of learning more interesting, practical and easier to remember by the pupils.
                     </p>
@@ -551,24 +432,22 @@
                     <p>
                         The learners targeted are primary school students whose level of proficiency varies. The lessons will be easy, interactive, and facilitating, and they will involve visuals, digital tools, and guided activities to make the pupils learn and engage. Pupils know the context of the lessons, e.g. their daily routines and classroom scenarios, so they can make the learning relevant to their own experiences and this will promote active learning.
                     </p>
-                    
                     <button class="glass-btn" onclick="navigateTo('portfolio')" style="align-self: center; margin-top: 20px;">
                         Enter Portfolio
-                        <svg style="margin-left: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- ==========================================
-             2. MAIN PORTFOLIO PAGE
+             2. PORTFOLIO PAGE
         =========================================== -->
         <section id="portfolio" class="view">
-            <div class="glass-panel portfolio-header">
+            <div class="glass-panel portfolio-header" style="margin-bottom: 40px;">
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                <div class="glass-content">
-                    <h1>Curriculum Overview</h1>
-                    <h2>Select a lesson plan to view the integrated approach</h2>
+                <div class="glass-content" style="text-align: center; padding: 30px;">
+                    <h1 style="margin-bottom: 0.5rem;">Curriculum Overview</h1>
+                    <h2 style="margin-bottom: 0;">Select a lesson plan to view the integrated approach</h2>
                 </div>
             </div>
 
@@ -580,9 +459,27 @@
                         <div class="card-iframe-container">
                             <iframe src="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/preview" title="Lesson 1"></iframe>
                         </div>
-                        <h3>Lesson 1</h3>
-                        <p style="font-size: 0.95rem;">Focus: Listening + Speaking + Vocabulary. Students practice conversational turn-taking while identifying key concepts in audio tracks.</p>
-                        <button class="glass-btn" onclick="navigateTo('lesson1')">View Full Lesson</button>
+                        <h3>Lesson 1: Listening</h3>
+                        <p style="font-size: 0.95rem;">Integrated with Speaking & Vocabulary. Daily Routines at Home.</p>
+                        <div class="btn-row">
+                            <button class="glass-btn view-lesson-btn" onclick="navigateTo('lesson1')">
+                                View Lesson 
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <div class="dropdown-container">
+                                <button class="glass-btn" style="padding: 12px; min-width: 48px; width: 48px; flex: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/preview" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open in New Tab
+                                    </a>
+                                    <a href="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/export?format=pdf" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -593,9 +490,27 @@
                         <div class="card-iframe-container">
                             <iframe src="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/preview" title="Lesson 2"></iframe>
                         </div>
-                        <h3>Lesson 2</h3>
-                        <p style="font-size: 0.95rem;">Focus: Speaking + Listening + Language Arts. Analyzing figurative language through poetry and participating in peer review sessions.</p>
-                        <button class="glass-btn" onclick="navigateTo('lesson2')">View Full Lesson</button>
+                        <h3>Lesson 2: Speaking</h3>
+                        <p style="font-size: 0.95rem;">Integrated with Listening & Language Arts. Prepositions of Place.</p>
+                        <div class="btn-row">
+                            <button class="glass-btn view-lesson-btn" onclick="navigateTo('lesson2')">
+                                View Lesson 
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <div class="dropdown-container">
+                                <button class="glass-btn" style="padding: 12px; min-width: 48px; width: 48px; flex: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/preview" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open in New Tab
+                                    </a>
+                                    <a href="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/export?format=pdf" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -606,9 +521,27 @@
                         <div class="card-iframe-container">
                             <iframe src="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/preview" title="Lesson 3"></iframe>
                         </div>
-                        <h3>Lesson 3</h3>
-                        <p style="font-size: 0.95rem;">Focus: Reading + Writing + Vocabulary. Comprehending articles using context clues and drafting analytical summary paragraphs.</p>
-                        <button class="glass-btn" onclick="navigateTo('lesson3')">View Full Lesson</button>
+                        <h3>Lesson 3: Reading</h3>
+                        <p style="font-size: 0.95rem;">Integrated with Writing & Vocabulary. CVC Words.</p>
+                        <div class="btn-row">
+                            <button class="glass-btn view-lesson-btn" onclick="navigateTo('lesson3')">
+                                View Lesson 
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <div class="dropdown-container">
+                                <button class="glass-btn" style="padding: 12px; min-width: 48px; width: 48px; flex: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/preview" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open in New Tab
+                                    </a>
+                                    <a href="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/export?format=pdf" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -619,9 +552,27 @@
                         <div class="card-iframe-container">
                             <iframe src="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/preview" title="Lesson 4"></iframe>
                         </div>
-                        <h3>Lesson 4</h3>
-                        <p style="font-size: 0.95rem;">Focus: Reading + Grammar + Writing. Emphasis is laid on sentence construction through proper structures and reading comprehension.</p>
-                        <button class="glass-btn" onclick="navigateTo('lesson4')">View Full Lesson</button>
+                        <h3>Lesson 4: Writing</h3>
+                        <p style="font-size: 0.95rem;">Integrated with Reading & Grammar. Present Continuous Tense.</p>
+                        <div class="btn-row">
+                            <button class="glass-btn view-lesson-btn" onclick="navigateTo('lesson4')">
+                                View Lesson 
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <div class="dropdown-container">
+                                <button class="glass-btn" style="padding: 12px; min-width: 48px; width: 48px; flex: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/preview" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open in New Tab
+                                    </a>
+                                    <a href="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/export?format=pdf" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -632,9 +583,27 @@
                         <div class="card-iframe-container">
                             <iframe src="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/preview" title="Lesson 5"></iframe>
                         </div>
-                        <h3>Lesson 5</h3>
-                        <p style="font-size: 0.95rem;">Focus: Language Arts Integration. Combines all four skills with the help of creative activities like songs, role-play, and games.</p>
-                        <button class="glass-btn" onclick="navigateTo('lesson5')">View Full Lesson</button>
+                        <h3>Lesson 5: Language Arts</h3>
+                        <p style="font-size: 0.95rem;">Integrated with Vocabulary & Grammar (All Skills). My Feelings.</p>
+                        <div class="btn-row">
+                            <button class="glass-btn view-lesson-btn" onclick="navigateTo('lesson5')">
+                                View Lesson 
+                                <svg class="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </button>
+                            <div class="dropdown-container">
+                                <button class="glass-btn" style="padding: 12px; min-width: 48px; width: 48px; flex: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a href="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/preview" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open in New Tab
+                                    </a>
+                                    <a href="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/export?format=pdf" target="_blank" class="dropdown-item">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Download PDF
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -650,59 +619,105 @@
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <div>
-                        <h1>Lesson Plan 1</h1>
-                        <h2>Listening + Speaking + Vocabulary</h2>
+                        <h1 style="font-size: 2.2rem; margin-bottom:0.2rem;">Lesson 1: Listening</h1>
+                        <h2 style="margin-bottom:0;">(Speaking + Vocabulary) - Daily Routines</h2>
                     </div>
-                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
-                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        Back to Portfolio
-                    </button>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">Back to Overview</button>
                 </div>
             </div>
 
-            <div class="lesson-grid">
-                <div class="lesson-sidebar">
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>🎯 Objectives</h3>
-                            <ul>
-                                <li>Identify main ideas and specific details in an audio recording.</li>
-                                <li>Practice conversational turn-taking and natural pacing.</li>
-                                <li>Learn and apply 10 target vocabulary words in context.</li>
-                            </ul>
-                        </div>
+            <!-- Redesigned Circular Tabs Layout -->
+            <div class="lesson-tabs-wrapper">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="l1-obj">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        Objective
+                    </button>
+                    <button class="tab-btn" data-target="l1-act">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Activity
+                    </button>
+                    <button class="tab-btn" data-target="l1-mat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materials
+                    </button>
+                </div>
+                <div class="tab-content-container custom-scrollbar">
+                    <div id="l1-obj" class="tab-pane active">
+                        <ul class="boxed-list">
+                            <li>Identify 3 daily routines from the audio correctly when asked question by their peers.</li>
+                            <li>Match 3 routines to the correct room in the house into the projected slide.</li>
+                            <li>Answer simple questions orally (e.g., “Where?”).</li>
+                            <li>Produce at least 1 simple sentence/phrase about daily routine.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>⚙️ Activities</h3>
-                            <ul>
-                                <li><strong>Pre:</strong> Brainstorming and visual vocabulary introduction.</li>
-                                <li><strong>While:</strong> Listening for gist, followed by listening for specific details.</li>
-                                <li><strong>Post:</strong> Group roleplay utilizing the target vocabulary.</li>
-                            </ul>
-                        </div>
+                    <div id="l1-act" class="tab-pane">
+                        <ul class="boxed-list">
+                            <li><strong>Pre Lesson:</strong> Activate prior knowledge. Pupils will be displayed a digital house diagram (e.g., via Canva) showing different rooms.</li>
+                            <li><strong>Stage I:</strong> Vocabulary. Pupils will be presented with Canva tools that have a 2d cross section of a house. Then, the students will be handed out a set of flashcards.</li>
+                            <li><strong>Stage II:</strong> Listening (Integrate with speaking). The pupils will be divided into groups to play competitive games.</li>
+                            <li><strong>Stage III:</strong> Speaking Activity. Pupils will be given a worksheet of “Guess Where Am I” and divided into pairs.</li>
+                            <li><strong>Post Lesson:</strong> Closure. Pupils will look again at Canva and answer teacher questions.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>📎 Materials</h3>
-                            <ul>
-                                <li>Audio Track (MP3)</li>
-                                <li>Vocabulary Flashcards</li>
-                                <li>Roleplay Scenario Cards</li>
-                            </ul>
+                    <div id="l1-mat" class="tab-pane">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 023935.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Canva House Diagram">
+                                <div class="material-info">
+                                    <div class="material-title">Canva House Diagram</div>
+                                    <div class="material-desc">Digital house cross-section used for vocabulary mapping.</div>
+                                    <a href="https://canva.link/kp68edgqzfaij5q" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 023918.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Astro Pinball BBM">
+                                <div class="material-info">
+                                    <div class="material-title">Astro Pinball BBM</div>
+                                    <div class="material-desc">Physical interactive board game for randomizing questions.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div style="background: rgba(255,255,255,0.05); height: 140px; display:flex; align-items:center; justify-content:center; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <svg style="color:rgba(255,255,255,0.2)" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                </div>
+                                <div class="material-info">
+                                    <div class="material-title">Speaking Activity Tool</div>
+                                    <div class="material-desc">Interactive tool for "Guess Where Am I" task.</div>
+                                    <a href="https://gemini.google.com/share/fe6eb7cffb9d" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel lesson-iframe">
-                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                    <div class="glass-content">
-                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
-                        <!-- Replace src with your actual Google Docs embed link -->
+            </div>
+
+            <!-- Document Viewer Below Cards -->
+            <div class="doc-viewer-container" id="viewer1">
+                <div class="iframe-viewport">
+                    <div class="iframe-scaler" id="scale-wrapper-1">
                         <iframe src="https://docs.google.com/document/d/1oxbIqIEfx6-Qv9YNG-I4J3QiH3aMLJNF/preview" title="Lesson 1 Doc"></iframe>
                     </div>
+                </div>
+                <div class="doc-toolbar">
+                    <span style="margin-right: auto; font-weight: 600; padding-left: 10px; color: white;">Lesson Plan Document</span>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-1', -0.1)" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-1', 0.1)" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-enter" onclick="toggleDocFullscreen('viewer1')" title="Enter Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-exit" onclick="toggleDocFullscreen('viewer1')" title="Exit Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span style="font-size:0.85rem; font-weight:600; margin-left:2px;">Exit Fullscreen</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -713,58 +728,114 @@
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <div>
-                        <h1>Lesson Plan 2</h1>
-                        <h2>Speaking + Listening + Language Arts</h2>
+                        <h1 style="font-size: 2.2rem; margin-bottom:0.2rem;">Lesson 2: Speaking</h1>
+                        <h2 style="margin-bottom:0;">(Listening + Language Arts) - Prepositions</h2>
                     </div>
-                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
-                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        Back to Portfolio
-                    </button>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">Back to Overview</button>
                 </div>
             </div>
 
-            <div class="lesson-grid">
-                <div class="lesson-sidebar">
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>🎯 Objectives</h3>
-                            <ul>
-                                <li>Present a short poem or narrative with expressive intonation.</li>
-                                <li>Actively listen to peers and provide constructive feedback.</li>
-                                <li>Understand and identify metaphors and similes.</li>
-                            </ul>
-                        </div>
+            <div class="lesson-tabs-wrapper">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="l2-obj">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        Objective
+                    </button>
+                    <button class="tab-btn" data-target="l2-act">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Activity
+                    </button>
+                    <button class="tab-btn" data-target="l2-mat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materials
+                    </button>
+                </div>
+                <div class="tab-content-container custom-scrollbar">
+                    <div id="l2-obj" class="tab-pane active">
+                        <ul class="boxed-list">
+                            <li>Identify 3 prepositions of place correctly through actions.</li>
+                            <li>Drag and put 3 items correctly according to the preposition based on audio instructions.</li>
+                            <li>Ask and answer 2 simple questions using correct prepositions with a dialog helper.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>⚙️ Activities</h3>
-                            <ul>
-                                <li><strong>Pre:</strong> Analyze a sample poem for figurative language.</li>
-                                <li><strong>While:</strong> Students prepare and present their pieces.</li>
-                                <li><strong>Post:</strong> Structured peer review and reflection.</li>
-                            </ul>
-                        </div>
+                    <div id="l2-act" class="tab-pane">
+                        <ul class="boxed-list">
+                            <li><strong>Pre Lesson:</strong> Pupils observe a durian plushie and guess what it is. The teacher introduces prepositions.</li>
+                            <li><strong>Stage I:</strong> Presentation. Pupils listen to a preposition song and act out positions.</li>
+                            <li><strong>Stage II:</strong> Practice (Listening Game). Small groups play a prepositions game online based on audio instructions.</li>
+                            <li><strong>Stage III:</strong> Production (Speaking). Pupils work in pairs with dialog strips which vary by proficiency.</li>
+                            <li><strong>Post Lesson:</strong> Exit Ticket. 3 pupils volunteer to come in front and practice asking/answering.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>📎 Materials</h3>
-                            <ul>
-                                <li>Poetry Anthology Handouts</li>
-                                <li>Presentation Rubric</li>
-                                <li>Peer Feedback Forms</li>
-                            </ul>
+                    <div id="l2-mat" class="tab-pane">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024013.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Durian Plushie">
+                                <div class="material-info">
+                                    <div class="material-title">Durian Plushie</div>
+                                    <div class="material-desc">Physical prop used in the pre-lesson.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024021.JPG" onclick="openImageModal(this.src)" class="material-item" alt="PrepoQuest BBM">
+                                <div class="material-info">
+                                    <div class="material-title">PrepoQuest BBM</div>
+                                    <div class="material-desc">Physical teaching aid for presenting prepositions.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024029.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Digital Listening Game">
+                                <div class="material-info">
+                                    <div class="material-title">Digital Listening Game</div>
+                                    <div class="material-desc">Interactive online game to practice listening.</div>
+                                    <a href="https://www.gamestolearnenglish.com/prepositions-game/#game" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024037.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Digital Speaking Tool">
+                                <div class="material-info">
+                                    <div class="material-title">Digital Speaking Tool</div>
+                                    <div class="material-desc">Interactive prompt generator for speaking activities.</div>
+                                    <a href="https://nopawaa-hub.github.io/preposition-speaking/" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024044.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Dialog Strips">
+                                <div class="material-info">
+                                    <div class="material-title">Dialog Strips</div>
+                                    <div class="material-desc">Differentiated dialogue helpers for pair work.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel lesson-iframe">
-                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                    <div class="glass-content">
-                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+            </div>
+
+            <div class="doc-viewer-container" id="viewer2">
+                <div class="iframe-viewport">
+                    <div class="iframe-scaler" id="scale-wrapper-2">
                         <iframe src="https://docs.google.com/document/d/1ILAZecOQFHDKBEhN9nV-HPQUS-z2ntxj/preview" title="Lesson 2 Doc"></iframe>
                     </div>
+                </div>
+                <div class="doc-toolbar">
+                    <span style="margin-right: auto; font-weight: 600; padding-left: 10px; color: white;">Lesson Plan Document</span>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-2', -0.1)" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-2', 0.1)" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-enter" onclick="toggleDocFullscreen('viewer2')" title="Enter Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-exit" onclick="toggleDocFullscreen('viewer2')" title="Exit Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span style="font-size:0.85rem; font-weight:600; margin-left:2px;">Exit Fullscreen</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -775,58 +846,97 @@
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <div>
-                        <h1>Lesson Plan 3</h1>
-                        <h2>Reading + Writing + Vocabulary</h2>
+                        <h1 style="font-size: 2.2rem; margin-bottom:0.2rem;">Lesson 3: Reading</h1>
+                        <h2 style="margin-bottom:0;">(Writing + Vocabulary) - CVC Words</h2>
                     </div>
-                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
-                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        Back to Portfolio
-                    </button>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">Back to Overview</button>
                 </div>
             </div>
 
-            <div class="lesson-grid">
-                <div class="lesson-sidebar">
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>🎯 Objectives</h3>
-                            <ul>
-                                <li>Comprehend and extract key arguments from a short article.</li>
-                                <li>Write a cohesive summary paragraph using transition words.</li>
-                                <li>Utilize context clues to define unfamiliar terms.</li>
-                            </ul>
-                        </div>
+            <div class="lesson-tabs-wrapper">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="l3-obj">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        Objective
+                    </button>
+                    <button class="tab-btn" data-target="l3-act">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Activity
+                    </button>
+                    <button class="tab-btn" data-target="l3-mat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materials
+                    </button>
+                </div>
+                <div class="tab-content-container custom-scrollbar">
+                    <div id="l3-obj" class="tab-pane active">
+                        <ul class="boxed-list">
+                            <li>Blend phonemes to form 3 CVC words correctly using a CVC word-building slider worksheet.</li>
+                            <li>Read and match 3 CVC words correctly to the correct pictures based on the worksheet.</li>
+                            <li>Write at least 3 CVC words correctly based on the words formed during the activity.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>⚙️ Activities</h3>
-                            <ul>
-                                <li><strong>Pre:</strong> Skimming and scanning exercises.</li>
-                                <li><strong>While:</strong> Detailed reading, highlighting, and annotating text.</li>
-                                <li><strong>Post:</strong> Drafting, editing, and finalizing a summary paragraph.</li>
-                            </ul>
-                        </div>
+                    <div id="l3-act" class="tab-pane">
+                        <ul class="boxed-list">
+                            <li><strong>Pre Lesson:</strong> Activate prior phonics knowledge. Pupils recap the sound of alphabets sound.</li>
+                            <li><strong>Stage I:</strong> Introduction to CVC blending. Pupils identify and articulate individual phonemes.</li>
+                            <li><strong>Stage II:</strong> Guided construction and reading. Pupils construct CVC words using the slider worksheet.</li>
+                            <li><strong>Stage III:</strong> Independent word construction. Pupils in small groups receive a “fries box” containing incomplete CVC word parts.</li>
+                            <li><strong>Post Lesson:</strong> Reflection. Pupils recall and verbalise CVC words constructed during the lesson.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>📎 Materials</h3>
-                            <ul>
-                                <li>Article Copies (Printed/Digital)</li>
-                                <li>Highlighters</li>
-                                <li>Summary Graphic Organizer</li>
-                            </ul>
+                    <div id="l3-mat" class="tab-pane">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024100.JPG" onclick="openImageModal(this.src)" class="material-item" alt="CVC Words Slider">
+                                <div class="material-info">
+                                    <div class="material-title">CVC Words Slider</div>
+                                    <div class="material-desc">Physical sliding tool to practice blending CVC phonemes.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024109.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Fries Bag Activity">
+                                <div class="material-info">
+                                    <div class="material-title">Fries Bag Activity</div>
+                                    <div class="material-desc">Group activity using fries cutouts to construct CVC words.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024143.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Duck Race Name Picker">
+                                <div class="material-info">
+                                    <div class="material-title">Duck Race Name Picker</div>
+                                    <div class="material-desc">Digital randomizer to select students.</div>
+                                    <a href="https://www.duckrace-game.com/" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel lesson-iframe">
-                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                    <div class="glass-content">
-                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+            </div>
+
+            <div class="doc-viewer-container" id="viewer3">
+                <div class="iframe-viewport">
+                    <div class="iframe-scaler" id="scale-wrapper-3">
                         <iframe src="https://docs.google.com/document/d/11fiUDcj1KPAZLMWU-AYH_MMfXTfER4_h/preview" title="Lesson 3 Doc"></iframe>
                     </div>
+                </div>
+                <div class="doc-toolbar">
+                    <span style="margin-right: auto; font-weight: 600; padding-left: 10px; color: white;">Lesson Plan Document</span>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-3', -0.1)" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-3', 0.1)" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-enter" onclick="toggleDocFullscreen('viewer3')" title="Enter Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-exit" onclick="toggleDocFullscreen('viewer3')" title="Exit Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span style="font-size:0.85rem; font-weight:600; margin-left:2px;">Exit Fullscreen</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -837,58 +947,97 @@
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <div>
-                        <h1>Lesson Plan 4</h1>
-                        <h2>Reading + Grammar + Writing</h2>
+                        <h1 style="font-size: 2.2rem; margin-bottom:0.2rem;">Lesson 4: Writing</h1>
+                        <h2 style="margin-bottom:0;">(Reading + Grammar) - Daily Activities</h2>
                     </div>
-                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
-                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        Back to Portfolio
-                    </button>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">Back to Overview</button>
                 </div>
             </div>
 
-            <div class="lesson-grid">
-                <div class="lesson-sidebar">
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>🎯 Objectives</h3>
-                            <ul>
-                                <li>Comprehend reading structures and extract contextual meaning.</li>
-                                <li>Construct proper sentences using target grammar rules.</li>
-                                <li>Apply new vocabulary in original writing tasks.</li>
-                            </ul>
-                        </div>
+            <div class="lesson-tabs-wrapper">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="l4-obj">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        Objective
+                    </button>
+                    <button class="tab-btn" data-target="l4-act">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Activity
+                    </button>
+                    <button class="tab-btn" data-target="l4-mat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materials
+                    </button>
+                </div>
+                <div class="tab-content-container custom-scrollbar">
+                    <div id="l4-obj" class="tab-pane active">
+                        <ul class="boxed-list">
+                            <li>Identify correct present continuous sentences from given options.</li>
+                            <li>Complete sentences using correct verb-ing forms.</li>
+                            <li>Write at least 3 simple sentences using present continuous tense accurately.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>⚙️ Activities</h3>
-                            <ul>
-                                <li><strong>Pre:</strong> Introduction to the text and grammatical focus.</li>
-                                <li><strong>While:</strong> Guided reading and identifying grammar in context.</li>
-                                <li><strong>Post:</strong> Drafting original sentences and peer review.</li>
-                            </ul>
-                        </div>
+                    <div id="l4-act" class="tab-pane">
+                        <ul class="boxed-list">
+                            <li><strong>Pre Lesson:</strong> Activate prior knowledge. Pupils observe several action pictures displayed.</li>
+                            <li><strong>Stage I:</strong> Pupils focus on the web slide. Pupils observe sentence models.</li>
+                            <li><strong>Stage II:</strong> Fish(ING) Action! Pupils form group to compete in fishing game containing a task.</li>
+                            <li><strong>Stage III:</strong> Pupils receive a worksheet with pictures to write 3-5 sentences independently.</li>
+                            <li><strong>Post Lesson:</strong> Exit Ticket. A sentence is written on the whiteboard, pupils volunteer to correct the sentence.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>📎 Materials</h3>
-                            <ul>
-                                <li>Reading Texts</li>
-                                <li>Grammar Worksheets</li>
-                                <li>Digital/Whiteboard</li>
-                            </ul>
+                    <div id="l4-mat" class="tab-pane">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024222.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Gemini Canvas">
+                                <div class="material-info">
+                                    <div class="material-title">Gemini Canvas</div>
+                                    <div class="material-desc">AI-generated action pictures used for sentence modeling.</div>
+                                    <a href="https://gemini.google.com/share/18b4717c7169" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024215.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Fish(ING) Action BBM">
+                                <div class="material-info">
+                                    <div class="material-title">Fish(ING) Action BBM</div>
+                                    <div class="material-desc">Physical fishing game for grammar and writing tasks.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024230.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Sentence Worksheet">
+                                <div class="material-info">
+                                    <div class="material-title">Sentence Worksheet</div>
+                                    <div class="material-desc">Worksheet for independent sentence construction.</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel lesson-iframe">
-                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                    <div class="glass-content">
-                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+            </div>
+
+            <div class="doc-viewer-container" id="viewer4">
+                <div class="iframe-viewport">
+                    <div class="iframe-scaler" id="scale-wrapper-4">
                         <iframe src="https://docs.google.com/document/d/16iC6t8Ikdc_9b13urUTRWKdEiNYIvupr/preview" title="Lesson 4 Doc"></iframe>
                     </div>
+                </div>
+                <div class="doc-toolbar">
+                    <span style="margin-right: auto; font-weight: 600; padding-left: 10px; color: white;">Lesson Plan Document</span>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-4', -0.1)" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-4', 0.1)" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-enter" onclick="toggleDocFullscreen('viewer4')" title="Enter Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-exit" onclick="toggleDocFullscreen('viewer4')" title="Exit Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span style="font-size:0.85rem; font-weight:600; margin-left:2px;">Exit Fullscreen</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -899,84 +1048,155 @@
                 <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
                 <div class="glass-content">
                     <div>
-                        <h1>Lesson Plan 5</h1>
-                        <h2>Language Arts Integration (All Skills)</h2>
+                        <h1 style="font-size: 2.2rem; margin-bottom:0.2rem;">Lesson 5: Language Arts</h1>
+                        <h2 style="margin-bottom:0;">(Vocabulary & Grammar) - My Feelings</h2>
                     </div>
-                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">
-                        <svg style="margin-right: 10px; width: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                        Back to Portfolio
-                    </button>
+                    <button class="glass-btn btn-back" onclick="navigateTo('portfolio')">Back to Overview</button>
                 </div>
             </div>
 
-            <div class="lesson-grid">
-                <div class="lesson-sidebar">
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>🎯 Objectives</h3>
-                            <ul>
-                                <li>Engage in creative expression using the English language.</li>
-                                <li>Combine listening, speaking, reading, and writing in one holistic activity.</li>
-                                <li>Collaborate effectively in group role-plays or games.</li>
-                            </ul>
-                        </div>
+            <div class="lesson-tabs-wrapper">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-target="l5-obj">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        Objective
+                    </button>
+                    <button class="tab-btn" data-target="l5-act">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                        Activity
+                    </button>
+                    <button class="tab-btn" data-target="l5-mat">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        Materials
+                    </button>
+                </div>
+                <div class="tab-content-container custom-scrollbar">
+                    <div id="l5-obj" class="tab-pane active">
+                        <ul class="boxed-list">
+                            <li>Identify 3 feelings from the song correctly.</li>
+                            <li>Respond imaginatively through speaking, acting, and writing during the board game activity.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>⚙️ Activities</h3>
-                            <ul>
-                                <li><strong>Pre:</strong> Song or story introduction to set the scene.</li>
-                                <li><strong>While:</strong> Interactive group role-play or language game.</li>
-                                <li><strong>Post:</strong> Group reflection and creative writing journal entry.</li>
-                            </ul>
-                        </div>
+                    <div id="l5-act" class="tab-pane">
+                        <ul class="boxed-list">
+                            <li><strong>Pre Lesson:</strong> Introduction to feelings vocabulary. Pupils observe a picture of an angry man.</li>
+                            <li><strong>Stage I:</strong> Presentation. The Feelings Song. Pupils identify the feelings in the song by showing the designated emotion card based on the lyrics.</li>
+                            <li><strong>Stage II:</strong> Practice. (Memory Retention Through TPR) Face Fun! and Face Switch!.</li>
+                            <li><strong>Stage III:</strong> Production (All skills Integration). Feeling Valley. Pupils form 4 groups and take turns to roll the dice.</li>
+                            <li><strong>Post Lesson:</strong> Exit Ticket. Pupils observe the teacher’s facial expressions and respond to questions.</li>
+                        </ul>
                     </div>
-                    <div class="glass-panel lesson-section">
-                        <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                        <div class="glass-content">
-                            <h3>📎 Materials</h3>
-                            <ul>
-                                <li>Audio/Video Clips</li>
-                                <li>Role-play Props</li>
-                                <li>Creative Writing Journals</li>
-                            </ul>
+                    <div id="l5-mat" class="tab-pane">
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024308.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Angry Man">
+                                <div class="material-info">
+                                    <div class="material-title">Angry Man</div>
+                                    <div class="material-desc">Visual prompt for set induction.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024323.JPG" onclick="openImageModal(this.src)" class="material-item" alt="The Feelings Song">
+                                <div class="material-info">
+                                    <div class="material-title">The Feelings Song</div>
+                                    <div class="material-desc">Music video for identifying emotions.</div>
+                                    <a href="https://youtu.be/0uCw649dBec?si=8WqBVa5ugYbTaTuz" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024331.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Emotion Card">
+                                <div class="material-info">
+                                    <div class="material-title">Emotion Card</div>
+                                    <div class="material-desc">Flashcards used alongside the song.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024340.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Song Lyrics Sheet">
+                                <div class="material-info">
+                                    <div class="material-title">Song Lyrics Sheet</div>
+                                    <div class="material-desc">Handout with the song's lyrics.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024348.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Lyrics Worksheet">
+                                <div class="material-info">
+                                    <div class="material-title">Lyrics Worksheet</div>
+                                    <div class="material-desc">Fill-in-the-blanks activity for the song.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024356.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Face Fun! Game">
+                                <div class="material-info">
+                                    <div class="material-title">Face Fun! Game</div>
+                                    <div class="material-desc">Digital game to match facial expressions.</div>
+                                    <a href="https://gemini.google.com/share/acbff8245a02" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024405.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Face Switch BBM">
+                                <div class="material-info">
+                                    <div class="material-title">Face Switch BBM</div>
+                                    <div class="material-desc">Interactive physical tool to switch faces.</div>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <img src="Screenshot 2026-04-23 024413.JPG" onclick="openImageModal(this.src)" class="material-item" alt="Feeling Valley Game">
+                                <div class="material-info">
+                                    <div class="material-title">Feeling Valley Game</div>
+                                    <div class="material-desc">Digital board game integrating all language skills.</div>
+                                    <a href="https://gemini.google.com/share/519e950fd150" target="_blank" class="material-btn">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg> Open Digital
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="glass-panel lesson-iframe">
-                    <div class="glass-bend"></div><div class="glass-face"></div><div class="glass-edge"></div>
-                    <div class="glass-content">
-                        <h3 style="margin-bottom: 15px;">Embedded Lesson Document</h3>
+            </div>
+
+            <div class="doc-viewer-container" id="viewer5">
+                <div class="iframe-viewport">
+                    <div class="iframe-scaler" id="scale-wrapper-5">
                         <iframe src="https://docs.google.com/document/d/1UTQC9fxwwZ3Hd0YOHafCrj8Q3tjmQmn6/preview" title="Lesson 5 Doc"></iframe>
                     </div>
+                </div>
+                <div class="doc-toolbar">
+                    <span style="margin-right: auto; font-weight: 600; padding-left: 10px; color: white;">Lesson Plan Document</span>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-5', -0.1)" title="Zoom Out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn" onclick="zoomDoc('scale-wrapper-5', 0.1)" title="Zoom In">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-enter" onclick="toggleDocFullscreen('viewer5')" title="Enter Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    </button>
+                    <button class="toolbar-btn btn-fullscreen-exit" onclick="toggleDocFullscreen('viewer5')" title="Exit Fullscreen">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path></svg>
+                        <span style="font-size:0.85rem; font-weight:600; margin-left:2px;">Exit Fullscreen</span>
+                    </button>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Navigation Script -->
+    <!-- UI Interaction Scripts -->
     <script>
+        // SPA Navigation Logic
         function navigateTo(targetViewId) {
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.classList.remove('active-link');
-            });
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active-link'));
             const activeLink = document.getElementById('link-' + targetViewId);
-            if(activeLink) {
-                activeLink.classList.add('active-link');
-            }
+            if(activeLink) activeLink.classList.add('active-link');
 
             const views = document.querySelectorAll('.view');
-            
             views.forEach(view => {
                 view.classList.remove('active');
-                setTimeout(() => {
-                    if(!view.classList.contains('active')) {
-                        view.style.display = 'none';
-                    }
-                }, 500); 
+                setTimeout(() => { if(!view.classList.contains('active')) view.style.display = 'none'; }, 500); 
             });
 
             const targetView = document.getElementById(targetViewId);
@@ -987,6 +1207,84 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }, 50);
             }
+        }
+
+        // Circular Tabs Logic
+        function initTabs() {
+            document.querySelectorAll('.lesson-page').forEach(page => {
+                const btns = page.querySelectorAll('.tab-btn');
+                const panes = page.querySelectorAll('.tab-pane');
+
+                btns.forEach(btn => {
+                    // Changed to click only to prevent accidental hover switching
+                    ['click'].forEach(evt => {
+                        btn.addEventListener(evt, () => {
+                            btns.forEach(b => b.classList.remove('active'));
+                            panes.forEach(p => p.classList.remove('active'));
+
+                            btn.classList.add('active');
+                            const targetId = btn.getAttribute('data-target');
+                            const targetPane = page.querySelector('#' + targetId);
+                            if(targetPane) targetPane.classList.add('active');
+                        });
+                    });
+                });
+            });
+        }
+        document.addEventListener('DOMContentLoaded', initTabs);
+
+        // Full Document Viewer Logic
+        let docScales = {};
+
+        function zoomDoc(wrapperId, amount) {
+            if (!docScales[wrapperId]) docScales[wrapperId] = 1;
+            
+            let newScale = docScales[wrapperId] + amount;
+            if (newScale < 0.5) newScale = 0.5;
+            if (newScale > 2.5) newScale = 2.5;
+            
+            docScales[wrapperId] = newScale;
+            const wrapper = document.getElementById(wrapperId);
+            wrapper.style.transform = `scale(${newScale})`;
+            wrapper.style.width = `${100 / newScale}%`;
+            wrapper.style.height = `${100 / newScale}%`;
+        }
+
+        // Reliable CSS Fullscreen Logic
+        function toggleDocFullscreen(containerId) {
+            const container = document.getElementById(containerId);
+            container.classList.toggle('is-maximized');
+            
+            if (container.classList.contains('is-maximized')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Exit fullscreen via ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.doc-viewer-container.is-maximized').forEach(el => {
+                    el.classList.remove('is-maximized');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        });
+
+        // Materials Gallery Modal Logic
+        const modal = document.getElementById("image-modal");
+        const modalImg = document.getElementById("modal-img");
+
+        function openImageModal(src) {
+            modalImg.src = src;
+            modal.classList.add("show");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeImageModal() {
+            modal.classList.remove("show");
+            document.body.style.overflow = "auto";
         }
     </script>
 </body>
